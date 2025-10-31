@@ -19,8 +19,8 @@ export function setupControls(camera, renderer) {
   // Configure controls
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
-  controls.autoRotate = true;
-  controls.autoRotateSpeed = 2;
+  controls.autoRotate = false;
+  controls.autoRotateSpeed = 0;
 
   return controls;
 }
@@ -32,3 +32,13 @@ export function setupControls(camera, renderer) {
 export function updateControls(controls) {
   controls.update();
 }
+
+export const keyStates = {};
+
+window.addEventListener('keydown', (event) => {
+  keyStates[event.code] = true;
+});
+
+window.addEventListener('keyup', (event) => {
+  keyStates[event.code] = false;
+});

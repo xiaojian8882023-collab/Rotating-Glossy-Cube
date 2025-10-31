@@ -5,6 +5,7 @@
  */
 
 // Import all modules
+import * as THREE from 'three';
 import scene from './scene.js';
 import camera, { setupCameraResize } from './camera.js';
 import renderer, { mountRenderer } from './renderer.js';
@@ -14,7 +15,9 @@ import { updateGlossyMaterialUniforms } from './shaders/glossyShader.js';
 import { setupLighting } from './lighting.js';
 import { createAnimationLoop } from './animation.js';
 import { setupSky } from './objects/sky.js';
-import { setupControls, updateControls } from './controls.js';
+import { setupControls, updateControls, keyStates } from './controls.js';
+
+const speed = 0.1;
 
 /**
  * Initialize and start the THREE.js application
@@ -55,6 +58,26 @@ const animate = () => {
   glossyCube.rotation.x += 0.01;
   glossyCube.rotation.y += 0.01;
 
+  // Update camera position based on key states
+  if (keyStates['KeyW']) {
+    camera.position.z -= speed;
+  }
+  if (keyStates['KeyS']) {
+    camera.position.z += speed;
+  }
+  if (keyStates['KeyA']) {
+    camera.position.x -= speed;
+  }
+  if (keyStates['KeyD']) {
+    camera.position.x += speed;
+  }
+  if (keyStates['Space']) {
+    camera.position.y += speed;
+  }
+  if (keyStates['ShiftLeft']) {
+    camera.position.y -= speed;
+  }
+
   // Update controls
   controls.update();
 
@@ -64,3 +87,9 @@ const animate = () => {
 
 // Start animation loop
 animate();
+
+// Handle color change
+const colorPicker = document.getElementById('color-picker');
+colorPicker.addEventListener('input', (event) => {
+  glossyMaterial.uniforms.color.value = new THREE.Color(event.target.value);
+});
