@@ -23,10 +23,10 @@ export { glossyVertexShader, glossyFragmentShader };
 export function createGlossyMaterial(options = {}) {
   const defaults = {
     color: 0x00d4ff,
-    roughness: 0.2,
+    roughness: 0.08,
     metalness: 0.0,
-    specularIntensity: 1.0,
-    fresnelPower: 3.0,
+    specularIntensity: 2.5,
+    fresnelPower: 4.5,
   };
 
   const settings = { ...defaults, ...options };

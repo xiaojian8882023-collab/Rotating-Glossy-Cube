@@ -29,6 +29,7 @@ varying vec2 vUv;
 
 // Constants for physically-based calculations
 const float PI = 3.14159265359;
+const float TAU = 6.28318530718; // 2 * PI
 const float EPSILON = 0.00001;
 
 /**
