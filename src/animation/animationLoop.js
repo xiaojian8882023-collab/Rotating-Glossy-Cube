@@ -1,6 +1,7 @@
 /**
  * main animation loop 🎬
  * handles frame updates, physics, rendering, and UI updates
+ * supports variable timesteps for high refresh rate displays
  */
 
 import { stepPhysics } from '../physics.js';
@@ -25,6 +26,7 @@ const CUBE_ROTATION_SPEED = 0.01;
  * @param {Object} config.pauseState - object with isPaused property
  * @param {Object} config.controls - orbit controls
  * @param {Object} config.statsPanel - stats panel UI
+ * @param {Object} config.fpsManager - (optional) high refresh rate FPS manager
  */
 export function startAnimationLoop({
   renderer,
@@ -38,13 +40,31 @@ export function startAnimationLoop({
   pauseState,
   controls,
   statsPanel,
+  fpsManager = null,
 }) {
+  let lastFrameTime = performance.now();
+
   const animate = () => {
     requestAnimationFrame(animate);
 
+    // Skip frame if we're limiting FPS and it's too soon
+    if (fpsManager && !fpsManager.shouldRenderFrame()) {
+      return;
+    }
+
+    const now = performance.now();
+    const deltaTime = (now - lastFrameTime) / 1000; // Convert to seconds
+    lastFrameTime = now;
+
+    // Get adaptive physics timestep for high FPS support
+    const physicsTimestep = fpsManager
+      ? fpsManager.getPhysicsTimestep()
+      : 1 / 60;
+    const physicsSubsteps = fpsManager ? fpsManager.getPhysicsSubsteps() : 3;
+
     // Step physics world (only if not paused)
     if (!pauseState.isPaused) {
-      stepPhysics(physicsWorld);
+      stepPhysics(physicsWorld, physicsTimestep, physicsSubsteps);
     }
 
     // Rotate the glossy cube
@@ -82,6 +102,11 @@ export function startAnimationLoop({
 
     // Update stats panel
     statsPanel.update(cubeSpawner.getCount(), pauseState.isPaused);
+
+    // Update FPS statistics if using high refresh rate
+    if (fpsManager) {
+      fpsManager.updateStats();
+    }
 
     // Render the scene
     renderer.render(scene, camera);

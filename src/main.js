@@ -1,6 +1,7 @@
 /**
  * glossy cube 3d demo 🚀
  * main orchestration file - sets up scene, physics, UI, and animation
+ * experimental support for high refresh rate displays (90, 120, 240 FPS)
  */
 
 import * as THREE from 'three';
@@ -25,10 +26,26 @@ import { setupUI } from './ui/setupUI.js';
 import { setupKeyboardShortcuts, setupDoubleClickSpawn } from './input/keyboardShortcuts.js';
 import { startAnimationLoop } from './animation/animationLoop.js';
 
+// High refresh rate support
+import { parseURLParams, getURLParamUsage } from './config/urlParams.js';
+import { createHighRefreshRateManager } from './display/highRefreshRate.js';
+
 /**
  * Initialize the entire application
  */
 function initializeApp() {
+  // === URL PARAMETERS & HIGH FPS ===
+  const urlParams = parseURLParams();
+
+  if (urlParams.targetFPS || urlParams.enableHighRefreshRate) {
+    console.log('🚀 [HighFPS] Experimental high refresh rate support enabled!');
+    console.log(getURLParamUsage());
+  }
+
+  if (urlParams.debug) {
+    console.log('🐛 [Debug] Debug mode enabled');
+    console.log('URL Params:', urlParams);
+  }
   // === RENDERER & DOM ===
   mountRenderer();
   setupCameraResize(renderer);
@@ -87,6 +104,23 @@ function initializeApp() {
     cubeSpawner.spawn(color);
   });
 
+  // === HIGH REFRESH RATE SETUP ===
+  let fpsManager = null;
+  if (urlParams.targetFPS || urlParams.enableHighRefreshRate) {
+    fpsManager = createHighRefreshRateManager({
+      targetFPS: urlParams.targetFPS,
+      enableHighRefreshRate: urlParams.enableHighRefreshRate,
+      debug: urlParams.debug,
+    });
+
+    // Initialize async refresh rate detection
+    fpsManager.init().then(() => {
+      if (urlParams.debug || urlParams.targetFPS) {
+        console.log(`[HighFPS] Initialized: ${fpsManager.getInfoString()}`);
+      }
+    });
+  }
+
   // === ANIMATION LOOP ===
   startAnimationLoop({
     renderer,
@@ -100,6 +134,7 @@ function initializeApp() {
     pauseState,
     controls,
     statsPanel: uiElements.statsPanel,
+    fpsManager,
   });
 }
 

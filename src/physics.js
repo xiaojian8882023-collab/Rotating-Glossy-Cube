@@ -35,11 +35,13 @@ export function createGround(world) {
  * steps the physics simulation forward
  * @param {CANNON.World} world - the physics world
  * @param {number} fixedTimeStep - fixed time step for simulation (default: 1/60)
+ * @param {number} substeps - number of substeps for higher frame rates (default: 3)
  */
-export function stepPhysics(world, fixedTimeStep = 1 / 60) {
+export function stepPhysics(world, fixedTimeStep = 1 / 60, substeps = 3) {
   // Use fixed time step for stable physics simulation
-  // Note: For variable time steps, pass actual deltaTime as 2nd param
-  world.step(fixedTimeStep, fixedTimeStep, 3);
+  // Substeps improve stability when running at higher frame rates
+  // Higher FPS = higher substeps needed to maintain stability
+  world.step(fixedTimeStep, fixedTimeStep, substeps);
 }
 
 /**
