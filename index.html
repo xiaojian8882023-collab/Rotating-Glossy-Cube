@@ -4,12 +4,44 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/webstorm-icon-logo.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>THREE.js Boilerplate</title>
+  <title>Glossy Cube</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="app"></div>
-  <input type="color" id="color-picker" value="#00d4ff">
+
+  <div class="ui-overlay">
+    <div class="ui-header">
+      <h1>Glossy Cube</h1>
+      <p class="subtitle">Interactive THREE.js Demo</p>
+    </div>
+
+    <div class="controls-panel">
+      <div class="control-group">
+        <label for="color-picker">Cube Color</label>
+        <input type="color" id="color-picker" value="#00d4ff">
+      </div>
+
+      <div class="info-panel">
+        <h3>Controls</h3>
+        <ul>
+          <li><strong>WASD</strong> - Move camera</li>
+          <li><strong>Space/Shift</strong> - Up/Down</li>
+          <li><strong>Mouse Drag</strong> - Rotate view</li>
+          <li><strong>Scroll</strong> - Zoom</li>
+        </ul>
+      </div>
+
+      <div class="easter-egg">
+        <span class="easter-egg-icon">🌫️</span>
+        <span class="easter-egg-text">5% chance for fog on load</span>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>
