@@ -1,7 +1,6 @@
 /**
- * @file Glossy shader module for THREE.js
- * @description High-quality glossy shader with physically-based specular highlights
- * and proper lighting calculations for professional appearance
+ * glossy shader stuff for THREE.js ✨
+ * makes things look super shiny and lit, like, for real real
  */
 
 import * as THREE from 'three';
@@ -11,14 +10,14 @@ import glossyFragmentShader from './glossyShader.frag?raw';
 export { glossyVertexShader, glossyFragmentShader };
 
 /**
- * Creates a glossy shader material for THREE.js
- * @param {Object} options - Configuration options for the glossy material
- * @param {THREE.Color|number|string} options.color - Base color of the material
- * @param {number} options.roughness - Surface roughness (0.0-1.0, default: 0.2)
- * @param {number} options.metalness - Metallic property (0.0-1.0, default: 0.0)
- * @param {number} options.specularIntensity - Specular highlight intensity (default: 1.0)
- * @param {number} options.fresnelPower - Fresnel effect power (default: 3.0)
- * @returns {THREE.ShaderMaterial} Configured shader material
+ * yo, this makes a glossy shader material for THREE.js
+ * @param {Object} options - settings for your shiny material
+ * @param {THREE.Color|number|string} options.color - base color, make it pop!
+ * @param {number} options.roughness - how rough it is (0.0-1.0, default: 0.2)
+ * @param {number} options.metalness - how metallic it is (0.0-1.0, default: 0.0)
+ * @param {number} options.specularIntensity - how bright the shiny bits are (default: 1.0)
+ * @param {number} options.fresnelPower - fresnel effect power (default: 3.0)
+ * @returns {THREE.ShaderMaterial} your new super glossy material!
  */
 export function createGlossyMaterial(options = {}) {
   const defaults = {
@@ -70,10 +69,10 @@ export function createGlossyMaterial(options = {}) {
 }
 
 /**
- * Updates shader uniforms with scene lighting data
- * @param {THREE.ShaderMaterial} material - The glossy shader material
- * @param {THREE.Scene} scene - The THREE.js scene containing lights
- * @param {THREE.Camera} camera - The active camera
+ * updates the shader's uniforms with light info from the scene
+ * @param {THREE.ShaderMaterial} material - the glossy shader material
+ * @param {THREE.Scene} scene - the THREE.js scene with all the lights
+ * @param {THREE.Camera} camera - the camera that's currently active
  */
 export function updateGlossyMaterialUniforms(material, scene, camera) {
   // Update camera position

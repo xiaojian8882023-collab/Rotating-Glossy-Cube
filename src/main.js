@@ -1,7 +1,6 @@
 /**
- * @file Main application entry point
- * @description Orchestrates the initialization and startup of the THREE.js application
- * by importing and coordinating all modules (scene, camera, renderer, objects, lighting, animation)
+ * yo this is the main file 🚀
+ * it gets the THREE.js app going by hooking up all the modules (scene, camera, renderer, objects, lights, animation stuff)
  */
 
 // Import all modules
@@ -20,13 +19,13 @@ import { setupControls, updateControls, keyStates } from './controls.js';
 const speed = 0.1;
 
 /**
- * Initialize and start the THREE.js application
- * @description Performs the following initialization steps in order:
- * 1. Mounts the WebGL renderer canvas to the DOM
- * 2. Adds 3D objects to the scene
- * 3. Configures lighting (ambient + point light)
- * 4. Sets up responsive camera resize handling
- * 5. Creates and starts the animation loop
+ * ok so this function kicks off the THREE.js app ✨
+ * basically it:
+ * 1. slaps the renderer canvas onto the page
+ * 2. throws some cool 3D stuff into the scene
+ * 3. sets up the lights (ambient + a point light, fancy!)
+ * 4. makes sure the camera resizes nicely
+ * 5. starts the animation loop, so things actually move lol
  */
 
 // Mount renderer to DOM

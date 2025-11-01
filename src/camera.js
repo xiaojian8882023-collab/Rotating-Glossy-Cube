@@ -1,18 +1,14 @@
 import * as THREE from 'three';
 
 /**
- * @file Camera configuration module
- * @description Creates and configures the perspective camera with resize handling
+ * camera setup module 📸
+ * makes and sets up the camera, also handles resizing it
  */
 
 /**
- * The main perspective camera for the 3D scene
+ * this is the main camera for the 3D scene, lol
  * @type {THREE.PerspectiveCamera}
- * @description Configured with 75° FOV, positioned at z=5
- * @property {number} fov - Field of view in degrees (75)
- * @property {number} aspect - Aspect ratio based on window dimensions
- * @property {number} near - Near clipping plane (0.1)
- * @property {number} far - Far clipping plane (1000)
+ * it's got a 75° FOV and chillin' at z=5
  */
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -23,15 +19,13 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.z = 5;
 
 /**
- * Sets up automatic camera and renderer resizing when the window dimensions change
- * @param {THREE.WebGLRenderer} renderer - The WebGL renderer to resize along with the camera
- * @returns {void}
- * @description Adds a window resize event listener that:
- * - Updates camera aspect ratio to match new window dimensions
- * - Recalculates camera projection matrix
- * - Resizes renderer to fill the new window size
- * @example
- * setupCameraResize(renderer);
+ * sets up the camera and renderer to resize automatically when you change the window size
+ * @param {THREE.WebGLRenderer} renderer - the renderer that needs to resize too
+ * @returns {void} nothing, just sets up the listener
+ * basically, it adds a window resize listener that:
+ * - updates the camera's aspect ratio
+ * - recalculates the camera's projection matrix
+ * - resizes the renderer to fit the new window size
  */
 export function setupCameraResize(renderer) {
   window.addEventListener('resize', () => {

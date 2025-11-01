@@ -1,6 +1,6 @@
 /**
- * @file OrbitControls setup
- * @description Initializes and configures OrbitControls for interactive camera manipulation
+ * sets up orbitcontrols 🎮
+ * so you can move the camera around and stuff
  */
 
 import {
@@ -8,10 +8,10 @@ import {
 } from 'three/examples/jsm/controls/OrbitControls.js';
 
 /**
- * Initialize OrbitControls for the camera
- * @param {THREE.Camera} camera - The THREE.js camera
- * @param {THREE.WebGLRenderer} renderer - The THREE.js renderer
- * @returns {OrbitControls} The configured OrbitControls instance
+ * makes the orbitcontrols for the camera
+ * @param {THREE.Camera} camera - the camera, obvs
+ * @param {THREE.WebGLRenderer} renderer - the renderer, duh
+ * @returns {OrbitControls} the configured controls, have fun!
  */
 export function setupControls(camera, renderer) {
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -26,8 +26,8 @@ export function setupControls(camera, renderer) {
 }
 
 /**
- * Update controls during animation loop
- * @param {OrbitControls} controls - The OrbitControls instance
+ * updates the controls in the animation loop
+ * @param {OrbitControls} controls - the controls to update, lol
  */
 export function updateControls(controls) {
   controls.update();

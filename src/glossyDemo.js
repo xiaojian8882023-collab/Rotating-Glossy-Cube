@@ -1,7 +1,6 @@
 /**
- * @file Glossy shader demonstration
- * @description Shows multiple cubes with different glossiness settings
- * to demonstrate the shader's versatility
+ * glossy shader demo time! 🤩
+ * check out these cubes with different shininess to see what the shader can do
  */
 
 import * as THREE from 'three';

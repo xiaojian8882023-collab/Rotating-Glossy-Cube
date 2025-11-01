@@ -2,6 +2,10 @@ import * as THREE from 'three'
 import { Sky } from 'three/addons/objects/Sky.js';
 import {MathUtils} from "three";
 
+/**
+ * sets up the skybox for the scene ☁️
+ * @param {THREE.Scene} scene - the scene to add the sky to
+ */
 export function setupSky(scene){
     const sky = new Sky();
     sky.scale.setScalar(450000);

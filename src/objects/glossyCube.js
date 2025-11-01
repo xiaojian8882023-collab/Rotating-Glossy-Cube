@@ -1,27 +1,26 @@
 /**
- * @file Glossy cube mesh object module
- * @description Creates a 3D cube with custom glossy shader material
+ * glossy cube module 💎
+ * makes a 3D cube using our custom glossy shader material, so shiny!
  */
 
 import * as THREE from 'three';
 import { createGlossyMaterial } from '../shaders/glossyShader.js';
 
 /**
- * Box geometry for the cube
+ * just the box geometry for the cube, standard 1x1x1 unit size
  * @type {THREE.BoxGeometry}
- * @description 1x1x1 unit cube geometry
  */
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 
 /**
- * Glossy shader material for the cube
+ * the super glossy shader material for the cube ✨
  * @type {THREE.ShaderMaterial}
- * @description Configured with:
- * - Cyan base color (0x00d4ff)
- * - Low roughness (0.15) for high glossiness
- * - No metalness (0.0) for dielectric material
- * - High specular intensity (1.5) for pronounced highlights
- * - Fresnel power (3.0) for edge reflections
+ * configured with:
+ * - cyan color (0x00d4ff)
+ * - low roughness (0.15) for that extra shine
+ * - no metalness (0.0) cuz it's not metal lol
+ * - high specular intensity (1.5) for bright highlights
+ * - fresnel power (3.0) for cool edge reflections
  */
 const glossyMaterial = createGlossyMaterial({
   color: 0x00d4ff,      // Cyan color matching original
@@ -32,9 +31,9 @@ const glossyMaterial = createGlossyMaterial({
 });
 
 /**
- * The glossy cube mesh combining geometry and shader material
+ * this is the glossy cube mesh, combining the geometry and the fancy shader material
  * @type {THREE.Mesh}
- * @description A 3D cube object with glossy shader material
+ * just a 3D cube with our glossy shader, ready to shine in the scene!
  */
 const glossyCube = new THREE.Mesh(geometry, glossyMaterial);
 

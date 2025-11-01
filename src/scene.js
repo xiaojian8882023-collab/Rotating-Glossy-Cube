@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 
 /**
- * @file Scene configuration module
- * @description Creates and configures the main THREE.js scene with background color
+ * scene setup module 🏞️
+ * makes and sets up the main THREE.js scene with a background color
  */
 
 /**
- * The main THREE.js scene object that contains all 3D objects, lights, and cameras
+ * this is the main THREE.js scene object, where all your 3D stuff, lights, and cameras live
  * @type {THREE.Scene}
- * @description Pre-configured with a dark background color (0x0a0a0a)
+ * it's got a dark background color (0x0a0a0a) by default, pretty moody 🌑
  */
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0a0a0a);

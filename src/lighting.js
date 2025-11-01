@@ -1,26 +1,17 @@
 import * as THREE from 'three';
 
 /**
- * @file Lighting configuration module
- * @description Sets up ambient and point lighting for the 3D scene
+ * lighting setup module 💡
+ * adds some cool ambient and point lights to the 3D scene
  */
 
 /**
- * Sets up the lighting system for the scene
- * @param {THREE.Scene} scene - The THREE.js scene to add lights to
- * @returns {void}
- * @description Creates and adds two types of lights:
- * - Ambient light: Provides even, non-directional illumination across all objects
- *   - Color: White (0xffffff)
- *   - Intensity: 0.5 (50% brightness)
- * - Point light: Emits light from a single point in all directions
- *   - Color: White (0xffffff)
- *   - Intensity: 1.0 (100% brightness)
- *   - Position: (5, 5, 5) in 3D space
- * @example
- * import scene from './scene.js';
- * import { setupLighting } from './lighting.js';
- * setupLighting(scene);
+ * sets up the lights for the scene, makes it look good!
+ * @param {THREE.Scene} scene - the THREE.js scene where the lights go
+ * @returns {void} nothing, just adds lights
+ * basically, it adds two kinds of lights:
+ * - ambient light: for general brightness, white, 50% intensity
+ * - point light: shines from one spot, white, 100% intensity, at (5, 5, 5)
  */
 export function setupLighting(scene) {
   // Create ambient light for base illumination

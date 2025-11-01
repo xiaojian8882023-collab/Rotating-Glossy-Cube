@@ -1,40 +1,27 @@
 /**
- * @file Animation loop module
- * @description Creates and manages the main animation loop for the 3D scene
+ * animation loop stuff 🔄
+ * keeps the 3D scene moving and grooving
  */
 
 /**
- * Creates an animation loop function that continuously updates and renders the scene
- * @param {THREE.WebGLRenderer} renderer - The WebGL renderer to use for rendering
- * @param {THREE.Scene} scene - The scene containing all 3D objects
- * @param {THREE.Camera} camera - The camera viewing the scene
- * @param {Array<THREE.Object3D>} objects - Array of objects to animate
- * @param {OrbitControls} controls - OrbitControls instance for camera interaction
- * @returns {Function} The animation function to be called to start the loop
- * @description Creates a recursive animation loop using requestAnimationFrame that:
- * - Updates OrbitControls for camera interaction
- * - Rotates all provided objects by 0.01 radians per frame on x and y axes
- * - Renders the scene from the camera's perspective
- * - Runs at approximately 60 FPS (browser-dependent)
- * @example
- * import { createAnimationLoop } from './animation.js';
- * import renderer from './renderer.js';
- * import scene from './scene.js';
- * import camera from './camera.js';
- * import cube from './objects/cube.js';
- * import { setupControls } from './controls.js';
- *
- * const controls = setupControls(camera, renderer);
- * const animate = createAnimationLoop(renderer, scene, camera, [cube], controls);
- * animate(); // Start the animation loop
+ * makes the main animation loop that updates and renders everything constantly
+ * @param {THREE.WebGLRenderer} renderer - the renderer, duh
+ * @param {THREE.Scene} scene - the scene with all your cool 3D stuff
+ * @param {THREE.Camera} camera - the camera looking at the scene
+ * @param {Array<THREE.Object3D>} objects - array of objects to make spin
+ * @param {OrbitControls} controls - orbitcontrols for moving the camera around
+ * @returns {Function} the function to call to start the loop!
+ * basically, it uses requestAnimationFrame to:
+ * - update the camera controls
+ * - spin all the objects a bit (0.01 radians on x and y)
+ * - draw the scene
+ * - tries to hit 60 FPS, browser permitting 🤞
  */
 export function createAnimationLoop(renderer, scene, camera, objects, controls) {
   /**
-   * The main animation function called recursively each frame
-   * @inner
-   * @returns {void}
-   */
-  function animate() {
+   * this is the actual animation function that runs every frame lol
+   * @returns {void} nothing, just does its thing
+   */  function animate() {
     requestAnimationFrame(animate);
 
     // Update OrbitControls

@@ -1,23 +1,20 @@
 import * as THREE from 'three';
 
 /**
- * @file Cube mesh object module
- * @description Creates a 3D cube with Phong material for realistic lighting
+ * cube object module 🧊
+ * makes a 3D cube with phong material for that realistic light stuff
  */
 
 /**
- * Box geometry for the cube
+ * the box geometry for our cube, it's a 1x1x1 unit cube, pretty standard
  * @type {THREE.BoxGeometry}
- * @description 1x1x1 unit cube geometry
  */
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 
 /**
- * Phong material for the cube with realistic lighting and reflections
+ * phong material for the cube, makes it look shiny and reflect light nicely
  * @type {THREE.MeshPhongMaterial}
- * @description Configured with:
- * - Cyan color (0x00d4ff)
- * - High shininess (100) for glossy appearance
+ * it's cyan (0x00d4ff) and super shiny (100) for that glossy look ✨
  */
 const material = new THREE.MeshPhongMaterial({
   color: 0x00d4ff,
@@ -25,12 +22,9 @@ const material = new THREE.MeshPhongMaterial({
 });
 
 /**
- * The cube mesh combining geometry and material
+ * this is the actual cube mesh, combining the geometry and material
  * @type {THREE.Mesh}
- * @description A 3D cube object ready to be added to the scene
- * @property {THREE.BoxGeometry} geometry - The cube's geometry
- * @property {THREE.MeshPhongMaterial} material - The cube's material
- * @property {THREE.Euler} rotation - Rotation angles (x, y, z)
+ * just a 3D cube ready to be added to the scene, ez pz
  */
 const cube = new THREE.Mesh(geometry, material);
 
