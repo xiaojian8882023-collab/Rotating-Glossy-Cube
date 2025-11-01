@@ -62,6 +62,14 @@ export function setupSky(scene, options = {}) {
     },
 
     /**
+     * Update shader time (for animated effects like stars and clouds)
+     * @param {number} time - Current time value
+     */
+    updateTime(time) {
+      skybox.material.uniforms.time.value = time;
+    },
+
+    /**
      * Update quality level
      * @param {number} level - Quality level (0=low, 1=medium, 2=high)
      */
@@ -100,6 +108,33 @@ export function setupSky(scene, options = {}) {
     },
 
     /**
+     * Toggle moon
+     * @param {boolean} enabled - Enable/disable moon
+     */
+    setMoonEnabled(enabled) {
+      skybox.material.uniforms.enableMoon.value = enabled;
+    },
+
+    /**
+     * Toggle sun disc
+     * @param {boolean} enabled - Enable/disable visible sun disc
+     */
+    setSunDiscEnabled(enabled) {
+      skybox.material.uniforms.enableSunDisc.value = enabled;
+    },
+
+    /**
+     * Update moon intensity
+     * @param {number} intensity - Moon brightness (0-2)
+     */
+    setMoonIntensity(intensity) {
+      skybox.material.uniforms.moonIntensity.value = Math.max(
+        0,
+        Math.min(2, intensity),
+      );
+    },
+
+    /**
      * Apply a preset configuration
      * @param {string} presetName - Name of preset from SkyPresets
      */
@@ -123,14 +158,19 @@ export function setupSky(scene, options = {}) {
       return {
         sunDirection: uniforms.sunDirection.value.clone(),
         sunIntensity: uniforms.sunIntensity.value,
+        moonDirection: uniforms.moonDirection.value.clone(),
+        moonIntensity: uniforms.moonIntensity.value,
         turbidity: uniforms.turbidity.value,
         rayleighCoeff: uniforms.rayleighCoeff.value,
         mieCoeff: uniforms.mieCoeff.value,
         mieDirectionalG: uniforms.mieDirectionalG.value,
         cloudCoverage: uniforms.cloudCoverage.value,
         starIntensity: uniforms.starIntensity.value,
+        time: uniforms.time.value,
         enableStars: uniforms.enableStars.value,
         enableClouds: uniforms.enableClouds.value,
+        enableMoon: uniforms.enableMoon.value,
+        enableSunDisc: uniforms.enableSunDisc.value,
         qualityLevel: uniforms.qualityLevel.value,
       };
     },

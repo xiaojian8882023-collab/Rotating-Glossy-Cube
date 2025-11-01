@@ -52,7 +52,7 @@ function initializeApp() {
 
   // === SCENE SETUP ===
   setupLighting(scene);
-  setupSky(scene);
+  const skyController = setupSky(scene);
 
   // === PHYSICS ===
   const physicsWorld = createPhysicsWorld();
@@ -135,6 +135,7 @@ function initializeApp() {
     controls,
     statsPanel: uiElements.statsPanel,
     fpsManager,
+    skyController,
   });
 }
 

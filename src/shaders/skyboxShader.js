@@ -26,8 +26,11 @@ export { skyboxVertexShader, skyboxFragmentShader };
  * @param {number} options.sunIntensity - Sun brightness (0-10, default: 1)
  * @param {number} options.cloudCoverage - Cloud coverage amount (0-1, default: 0.3)
  * @param {number} options.starIntensity - Star brightness (0-1, default: 0.5)
+ * @param {number} options.moonIntensity - Moon brightness (0-2, default: 1)
  * @param {boolean} options.enableStars - Render stars at night (default: true)
  * @param {boolean} options.enableClouds - Render procedural clouds (default: true)
+ * @param {boolean} options.enableMoon - Render moon (default: true)
+ * @param {boolean} options.enableSunDisc - Render visible sun disc (default: true)
  * @param {number} options.qualityLevel - Render quality (0=low, 1=medium, 2=high, default: 1)
  * @returns {THREE.ShaderMaterial} Skybox shader material
  */
@@ -38,10 +41,13 @@ export function createSkyboxMaterial(options = {}) {
     mieCoefficient: 0.005,
     mieDirectionalG: 0.8,
     sunIntensity: 1.0,
-    cloudCoverage: 0.3,
+    cloudCoverage: 0.4, // Increased from 0.3 for better visibility
     starIntensity: 0.5,
+    moonIntensity: 1.0,
     enableStars: true,
     enableClouds: true,
+    enableMoon: true,
+    enableSunDisc: true,
     qualityLevel: 1,
   };
 
@@ -56,6 +62,10 @@ export function createSkyboxMaterial(options = {}) {
       sunDirection: { value: new THREE.Vector3(0, 1, 0) },
       sunIntensity: { value: settings.sunIntensity },
 
+      // Moon parameters
+      moonDirection: { value: new THREE.Vector3(0, -0.5, 1).normalize() },
+      moonIntensity: { value: settings.moonIntensity },
+
       // Atmospheric scattering parameters
       turbidity: { value: settings.turbidity },
       rayleighCoeff: { value: settings.rayleigh },
@@ -66,10 +76,13 @@ export function createSkyboxMaterial(options = {}) {
       timeOfDay: { value: 0.5 }, // Noon by default
       cloudCoverage: { value: settings.cloudCoverage },
       starIntensity: { value: settings.starIntensity },
+      time: { value: 0.0 }, // Animated time for effects
 
       // Performance toggles
       enableStars: { value: settings.enableStars },
       enableClouds: { value: settings.enableClouds },
+      enableMoon: { value: settings.enableMoon },
+      enableSunDisc: { value: settings.enableSunDisc },
       qualityLevel: { value: settings.qualityLevel },
     },
     side: THREE.BackSide, // Render inside of cube
@@ -154,6 +167,34 @@ export function updateSunFromSpherical(material, radius, phi, theta) {
 }
 
 /**
+ * Updates moon position based on time of day and direction angles
+ * @param {THREE.ShaderMaterial} material - Skybox material to update
+ * @param {number} azimuth - Moon azimuth angle in radians (0-2π)
+ * @param {number} elevation - Moon elevation angle in radians (-π/2 to π/2)
+ * @param {number} intensity - Moon intensity multiplier (optional)
+ */
+export function updateMoonPosition(
+  material,
+  azimuth,
+  elevation,
+  intensity = null,
+) {
+  const moonDirection = new THREE.Vector3();
+
+  // Convert spherical coordinates to Cartesian
+  moonDirection.x = Math.cos(elevation) * Math.sin(azimuth);
+  moonDirection.y = Math.sin(elevation);
+  moonDirection.z = Math.cos(elevation) * Math.cos(azimuth);
+
+  // Update uniforms
+  material.uniforms.moonDirection.value.copy(moonDirection);
+
+  if (intensity !== null) {
+    material.uniforms.moonIntensity.value = intensity;
+  }
+}
+
+/**
  * Animates the sky through a day/night cycle
  * @param {THREE.ShaderMaterial} material - Skybox material to update
  * @param {number} time - Time value (use clock.getElapsedTime() or similar)
@@ -162,11 +203,23 @@ export function updateSunFromSpherical(material, radius, phi, theta) {
 export function animateDayNightCycle(material, time, speed = 0.1) {
   const angle = time * speed;
 
+  // Update shader time uniform for animated effects (stars, clouds)
+  material.uniforms.time.value = time;
+
   // Calculate sun position for circular path
   const elevation = Math.sin(angle) * Math.PI * 0.4; // Max elevation 72 degrees
   const azimuth = angle;
 
   updateSunPosition(material, azimuth, elevation);
+
+  // Position moon opposite to sun (roughly)
+  const moonElevation = -elevation;
+  const moonAzimuth = azimuth + Math.PI; // 180 degrees offset
+  updateMoonPosition(material, moonAzimuth, moonElevation);
+
+  // Adjust moon intensity based on sun position (brighter at night)
+  const nightFactor = Math.max(0, -Math.sin(elevation));
+  material.uniforms.moonIntensity.value = nightFactor * 1.5;
 
   // Adjust cloud coverage based on time of day
   // Fewer clouds at noon, more at dawn/dusk
@@ -214,8 +267,13 @@ export const SkyPresets = {
     mieCoefficient: 0.005,
     mieDirectionalG: 0.8,
     sunIntensity: 1.0,
-    cloudCoverage: 0.1,
+    cloudCoverage: 0.35, // Increased for better visibility
     starIntensity: 0.5,
+    moonIntensity: 0.2,
+    enableStars: true,
+    enableClouds: true,
+    enableMoon: true,
+    enableSunDisc: true,
   },
 
   // Overcast day
@@ -227,6 +285,11 @@ export const SkyPresets = {
     sunIntensity: 0.5,
     cloudCoverage: 0.8,
     starIntensity: 0.0,
+    moonIntensity: 0.0,
+    enableStars: false,
+    enableClouds: true,
+    enableMoon: false,
+    enableSunDisc: false, // Sun hidden by clouds
   },
 
   // Clear sunset
@@ -238,6 +301,11 @@ export const SkyPresets = {
     sunIntensity: 1.5,
     cloudCoverage: 0.3,
     starIntensity: 0.3,
+    moonIntensity: 0.8,
+    enableStars: true,
+    enableClouds: true,
+    enableMoon: true,
+    enableSunDisc: true,
   },
 
   // Clear night
@@ -249,6 +317,11 @@ export const SkyPresets = {
     sunIntensity: 0.1,
     cloudCoverage: 0.0,
     starIntensity: 1.0,
+    moonIntensity: 1.5,
+    enableStars: true,
+    enableClouds: false,
+    enableMoon: true,
+    enableSunDisc: false, // Sun is below horizon
   },
 
   // Hazy summer day
@@ -260,5 +333,10 @@ export const SkyPresets = {
     sunIntensity: 1.2,
     cloudCoverage: 0.2,
     starIntensity: 0.2,
+    moonIntensity: 0.3,
+    enableStars: true,
+    enableClouds: true,
+    enableMoon: true,
+    enableSunDisc: true,
   },
 };

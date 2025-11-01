@@ -27,6 +27,7 @@ const CUBE_ROTATION_SPEED = 0.01;
  * @param {Object} config.controls - orbit controls
  * @param {Object} config.statsPanel - stats panel UI
  * @param {Object} config.fpsManager - (optional) high refresh rate FPS manager
+ * @param {Object} config.skyController - (optional) sky controller for updating time
  */
 export function startAnimationLoop({
   renderer,
@@ -41,8 +42,10 @@ export function startAnimationLoop({
   controls,
   statsPanel,
   fpsManager = null,
+  skyController = null,
 }) {
   let lastFrameTime = performance.now();
+  let elapsedTime = 0;
 
   const animate = () => {
     requestAnimationFrame(animate);
@@ -55,6 +58,12 @@ export function startAnimationLoop({
     const now = performance.now();
     const deltaTime = (now - lastFrameTime) / 1000; // Convert to seconds
     lastFrameTime = now;
+    elapsedTime += deltaTime;
+
+    // Update sky shader time for animated effects (stars twinkling, clouds moving)
+    if (skyController) {
+      skyController.updateTime(elapsedTime);
+    }
 
     // Get adaptive physics timestep for high FPS support
     const physicsTimestep = fpsManager
