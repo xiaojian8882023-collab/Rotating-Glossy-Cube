@@ -59,6 +59,14 @@ export function createGlossyMaterial(options = {}) {
 
       // Environment map intensity
       envMapIntensity: { value: new THREE.Vector3(0.5, 0.5, 0.5) },
+
+      // Fog uniforms (disabled by default)
+      enableFog: { value: false },
+      fogColor: { value: new THREE.Color(0x87ceeb) },
+      fogNear: { value: 1.0 },
+      fogFar: { value: 50.0 },
+      fogDensity: { value: 2.5 },
+      heightFalloff: { value: 0.1 },
     },
     // Enable proper depth testing
     depthTest: true,

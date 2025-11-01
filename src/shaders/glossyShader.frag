@@ -21,11 +21,21 @@ uniform vec3 customCameraPosition; // Camera position in world space
 // Environment uniforms (optional)
 uniform vec3 envMapIntensity;     // Environment reflection intensity
 
+// Fog uniforms
+uniform bool enableFog;           // Whether fog is enabled
+uniform vec3 fogColor;            // Fog color
+uniform float fogNear;            // Fog start distance
+uniform float fogFar;             // Fog end distance
+uniform float fogDensity;         // Fog density for exponential falloff
+uniform float heightFalloff;      // Height-based fog falloff
+
 // Varyings from vertex shader
 varying vec3 vWorldPosition;
 varying vec3 vWorldNormal;
 varying vec3 vViewPosition;
 varying vec2 vUv;
+varying float vFogDepth;
+varying float vWorldY;
 
 // Constants for physically-based calculations
 const float PI = 3.14159265359;
@@ -153,6 +163,29 @@ void main() {
 
   // Apply gamma correction (sRGB output)
   color = pow(color, vec3(1.0/2.2));
+
+  // Apply fog if enabled (using realistic atmospheric fog from fog shader)
+  if (enableFog) {
+    // Exponential squared fog - realistic atmospheric scattering
+    float fogDistance = max(vFogDepth - fogNear, 0.0);
+    float fogRange = fogFar - fogNear;
+    float normalizedDistance = fogDistance / fogRange;
+
+    // Exponential squared falloff for natural fog density
+    float distanceFog = 1.0 - exp(-fogDensity * normalizedDistance * normalizedDistance);
+
+    // Height-based fog - fog accumulates closer to ground
+    float heightFactor = exp(-max(vWorldY, 0.0) * heightFalloff);
+
+    // Combine distance and height fog
+    float fogFactor = clamp(distanceFog * (0.5 + 0.5 * heightFactor), 0.0, 1.0);
+
+    // Apply atmospheric color shift based on distance (Rayleigh scattering)
+    vec3 atmosphericColor = mix(fogColor, fogColor * 0.9 + vec3(0.05, 0.08, 0.12), normalizedDistance * 0.3);
+
+    // Mix rendered color with atmospheric fog
+    color = mix(color, atmosphericColor, fogFactor);
+  }
 
   // Output final color with full opacity
   gl_FragColor = vec4(color, 1.0);

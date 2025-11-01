@@ -41,6 +41,18 @@ setupLighting(scene);
 // Setup sky shader
 setupSky(scene);
 
+// 5% chance to enable atmospheric fog on page load using our custom fog shader
+if (Math.random() < 0.05) {
+  // Enable fog in the glossy material with realistic atmospheric parameters
+  glossyMaterial.uniforms.enableFog.value = true;
+  glossyMaterial.uniforms.fogColor.value = new THREE.Color(0x87ceeb); // Sky blue
+  glossyMaterial.uniforms.fogNear.value = 1.0;
+  glossyMaterial.uniforms.fogFar.value = 50.0;
+  glossyMaterial.uniforms.fogDensity.value = 2.5;  // Natural fog density
+  glossyMaterial.uniforms.heightFalloff.value = 0.1; // Fog near ground
+  console.log('🌫️ fog mode activated! rare vibes fr (using custom fog shader)');
+}
+
 // Setup camera resize handling
 setupCameraResize(renderer);
 
@@ -55,8 +67,8 @@ const animate = () => {
   glossyCube.rotation.x += 0.01;
   glossyCube.rotation.y += 0.01;
 
-  // Update glossy material uniforms (camera position, time)
-  updateGlossyMaterialUniforms(glossyMaterial, camera);
+  // Update glossy material uniforms (camera position, lights)
+  updateGlossyMaterialUniforms(glossyMaterial, scene, camera);
 
   // Update camera position based on key states
   if (keyStates['KeyW']) {
