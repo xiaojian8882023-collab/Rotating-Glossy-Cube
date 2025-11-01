@@ -11,6 +11,7 @@ import renderer, { mountRenderer } from './renderer.js';
 // import cube from './objects/cube.js'; // Original cube with Phong material
 import glossyCube, { glossyMaterial } from './objects/glossyCube.js'; // New glossy cube
 import { updateGlossyMaterialUniforms } from './shaders/glossyShader.js';
+// import fogCube, { fogMaterial } from './objects/fogCube.js';
 import { setupLighting } from './lighting.js';
 import { createAnimationLoop } from './animation.js';
 import { setupSky } from './objects/sky.js';
@@ -50,12 +51,12 @@ const controls = setupControls(camera, renderer);
 const animate = () => {
   requestAnimationFrame(animate);
 
-  // Update shader uniforms with current scene data
-  updateGlossyMaterialUniforms(glossyMaterial, scene, camera);
-
   // Rotate the glossy cube
   glossyCube.rotation.x += 0.01;
   glossyCube.rotation.y += 0.01;
+
+  // Update glossy material uniforms (camera position, time)
+  updateGlossyMaterialUniforms(glossyMaterial, camera);
 
   // Update camera position based on key states
   if (keyStates['KeyW']) {
