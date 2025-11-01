@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skybox Shader Test</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: monospace;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 100;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h3>Skybox Shader Test</h3>
+        <p>Press H for controls</p>
+        <div id="status">Loading...</div>
+    </div>
+    <div id="app"></div>
+    <script type="module">
+        import * as THREE from 'three';
+        import { setupSky } from './src/objects/sky.js';
+        import { initSkyboxDemo, addSkyboxKeyboardControls } from './src/demo/skyboxDemo.js';
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            20000
+        );
+        camera.position.set(0, 0, 5);
+
+        // Renderer setup
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.0;
+        document.getElementById('app').appendChild(renderer.domElement);
+
+        // Add skybox with demo controls
+        const demo = initSkyboxDemo(scene);
+        addSkyboxKeyboardControls(demo);
+
+        // Add a simple cube to see the skybox reflection
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x808080,
+            metalness: 0.8,
+            roughness: 0.2
+        });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        // Add lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        // FPS counter
+        let frameCount = 0;
+        let lastTime = performance.now();
+        let fps = 0;
+
+        function updateFPS() {
+            frameCount++;
+            const currentTime = performance.now();
+            if (currentTime - lastTime >= 1000) {
+                fps = frameCount;
+                frameCount = 0;
+                lastTime = currentTime;
+                updateStatus();
+            }
+        }
+
+        function updateStatus() {
+            const status = demo.getStatus();
+            document.getElementById('status').innerHTML = `
+                FPS: ${fps}<br>
+                Quality: ${['Low', 'Medium', 'High'][status.quality]}<br>
+                Sun Elevation: ${status.sunElevation.toFixed(1)}°<br>
+                Clouds: ${(status.clouds * 100).toFixed(0)}%<br>
+                Turbidity: ${status.turbidity.toFixed(1)}
+            `;
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Update demo animation
+            demo.update();
+
+            // Rotate cube
+            cube.rotation.x += 0.005;
+            cube.rotation.y += 0.01;
+
+            // Update FPS
+            updateFPS();
+
+            // Render
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start animation
+        animate();
+
+        // Update status initially
+        setTimeout(updateStatus, 100);
+    </script>
+</body>
+</html>

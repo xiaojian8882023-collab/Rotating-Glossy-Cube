@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.9.2",
     "prettier": "^3.3.1",
-    "vite": "^5.1.6"
+    "vite": "^7.1.12"
   },
   "dependencies": {
     "three": "^0.180.0"
