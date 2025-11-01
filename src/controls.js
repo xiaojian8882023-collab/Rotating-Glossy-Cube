@@ -35,10 +35,23 @@ export function updateControls(controls) {
 
 export const keyStates = {};
 
+// Keys that should prevent default browser behavior
+const movementKeys = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space', 'ShiftLeft'];
+
 window.addEventListener('keydown', (event) => {
-  keyStates[event.code] = true;
+  // Only set keyState if not in an input field
+  if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+    keyStates[event.code] = true;
+
+    // Prevent default for movement keys to avoid browser shortcuts
+    if (movementKeys.includes(event.code)) {
+      event.preventDefault();
+    }
+  }
 });
 
 window.addEventListener('keyup', (event) => {
-  keyStates[event.code] = false;
+  if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+    keyStates[event.code] = false;
+  }
 });

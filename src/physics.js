@@ -34,10 +34,12 @@ export function createGround(world) {
 /**
  * steps the physics simulation forward
  * @param {CANNON.World} world - the physics world
- * @param {number} deltaTime - time step in seconds
+ * @param {number} fixedTimeStep - fixed time step for simulation (default: 1/60)
  */
-export function stepPhysics(world, deltaTime = 1 / 60) {
-  world.step(1 / 60, deltaTime, 3);
+export function stepPhysics(world, fixedTimeStep = 1 / 60) {
+  // Use fixed time step for stable physics simulation
+  // Note: For variable time steps, pass actual deltaTime as 2nd param
+  world.step(fixedTimeStep, fixedTimeStep, 3);
 }
 
 /**

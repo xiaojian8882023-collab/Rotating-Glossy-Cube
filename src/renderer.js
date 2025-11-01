@@ -24,7 +24,11 @@ renderer.setPixelRatio(window.devicePixelRatio);
  * throws an error if '#app' isn't found, so make sure it's there!
  */
 export function mountRenderer() {
-  document.getElementById('app').appendChild(renderer.domElement);
+  const appElement = document.getElementById('app');
+  if (!appElement) {
+    throw new Error('Could not find element with id "app". Make sure your HTML has <div id="app"></div>');
+  }
+  appElement.appendChild(renderer.domElement);
 }
 
 export default renderer;

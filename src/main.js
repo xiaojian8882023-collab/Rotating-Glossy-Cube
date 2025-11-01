@@ -172,10 +172,14 @@ animate();
 
 // Handle color change
 const colorPicker = document.getElementById('color-picker');
-colorPicker.addEventListener('input', (event) => {
-  glossyMaterial.uniforms.baseColor.value = new THREE.Color(event.target.value);
-  glossyMaterial.needsUpdate = true;
-});
+if (colorPicker) {
+  colorPicker.addEventListener('input', (event) => {
+    glossyMaterial.uniforms.baseColor.value = new THREE.Color(event.target.value);
+    glossyMaterial.needsUpdate = true;
+  });
+} else {
+  console.warn('Color picker element not found');
+}
 
 // Spawn cube function
 const spawnCube = () => {
@@ -228,8 +232,12 @@ actionButtons.appendChild(resetCameraButton);
 // Insert buttons into controls panel
 const controlsPanel = document.querySelector('.controls-panel');
 const controlGroup = document.querySelector('.control-group');
-controlsPanel.insertBefore(spawnButton, controlGroup.nextElementSibling);
-controlsPanel.insertBefore(actionButtons, controlGroup.nextElementSibling);
+if (controlsPanel && controlGroup) {
+  controlsPanel.insertBefore(spawnButton, controlGroup.nextElementSibling);
+  controlsPanel.insertBefore(actionButtons, controlGroup.nextElementSibling);
+} else {
+  console.warn('Controls panel elements not found. UI buttons will not be mounted.');
+}
 
 // Keyboard shortcuts
 const keyboardShortcuts = {
@@ -254,8 +262,14 @@ const keyboardShortcuts = {
 };
 
 document.addEventListener('keydown', (event) => {
+  // Don't trigger shortcuts if typing in an input field
+  if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+    return;
+  }
+
   const key = event.key.toLowerCase();
   if (keyboardShortcuts[key]) {
+    event.preventDefault(); // Prevent default browser behavior
     keyboardShortcuts[key]();
   }
 });

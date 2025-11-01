@@ -88,12 +88,15 @@ export function createShortcutsPanel() {
     <div style="margin-bottom: 10px; border-bottom: 1px solid rgba(0, 212, 255, 0.3); padding-bottom: 8px;">
       <strong>⌨️ Shortcuts</strong>
     </div>
-    <div><strong>Click</strong> - Spawn Cube</div>
     <div><strong>Double Click</strong> - Spawn Cube</div>
     <div><strong>P</strong> - Pause/Resume</div>
     <div><strong>C</strong> - Clear All Cubes</div>
     <div><strong>R</strong> - Reset Camera</div>
     <div><strong>?</strong> - Toggle This Panel</div>
+    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0, 212, 255, 0.3);">
+      <strong>WASD</strong> - Move Camera<br>
+      <strong>Space/Shift</strong> - Up/Down
+    </div>
   `;
 
   document.body.appendChild(panel);
